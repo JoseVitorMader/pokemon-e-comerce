@@ -1,10 +1,13 @@
 function Footer() {
   return (
-    <footer>
-      <p>&copy; 2025 Seu Nome. Todos os direitos reservados.</p>
-      <p>
-        Siga-me no <a href="#">LinkedIn</a> · <a href="#">Instagram</a> · <a href="#">GitHub</a>
-      </p>
+    <footer className="footer footer-fixed">
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <strong>Digimon Shop</strong>
+          <div className="footer-sub">Colecione. Troque. Lute.</div>
+        </div>
+        <div className="footer-copy">&copy; 2025 Digimon Shop. Todos os direitos reservados.</div>
+      </div>
     </footer>
   );
 }
