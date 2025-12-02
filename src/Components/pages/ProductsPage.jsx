@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscribeProducts } from "../firebase";
+import { subscribeProducts } from "../../firebase";
 import { Link } from "react-router-dom";
 
 export default function ProductsPage() {

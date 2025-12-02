@@ -1,18 +1,18 @@
 import React from "react";
 import "./styles.css";
-import Header from "./Components/Header";
-import Navigation from "./Components/Navigation";
-import DigitalBackground from "./Components/DigitalBackground";
-import Footer from "./Components/Footer";
+import { Header, Navigation, Footer } from "./Components/layout";
+import { DigitalBackground } from "./Components/common";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./Components/Home";
-import ProductsPage from "./Components/ProductsPage";
-import ProductPage from "./Components/ProductPage";
-import Cart from "./Components/Cart";
-import Checkout from "./Components/Checkout";
-import ProfilePage from "./Components/ProfilePage";
-import LoginPage from "./Components/LoginPage";
-import ManageProducts from "./Components/ManageProducts";
+import { 
+  Home, 
+  ProductsPage, 
+  ProductPage, 
+  Cart, 
+  Checkout, 
+  ProfilePage, 
+  LoginPage, 
+  ManageProducts 
+} from "./Components/pages";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ToastProvider } from "./context/ToastContext";

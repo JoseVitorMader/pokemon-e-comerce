@@ -1,14 +1,22 @@
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { user, loginWithGoogle, logout } = useAuth();
+  const { cart } = useCart();
 
   const initials = user ? (user.displayName ? user.displayName.split(' ').map(n=>n[0]).slice(0,2).join('') : (user.email ? user.email[0].toUpperCase() : 'U')) : '';
+  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
     <header className="header">
       <h1 className="logo">Digimon Shop</h1>
       <div className="header-actions">
+        <Link to="/cart" className="cart-icon-link">
+          🛒
+          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+        </Link>
         {user ? (
           <div className="profile-inline">
             {user.photoURL ? (

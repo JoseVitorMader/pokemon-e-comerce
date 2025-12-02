@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { subscribeProducts } from "../firebase";
+import { subscribeProducts } from "../../firebase";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -19,8 +19,9 @@ export default function Home() {
     <div>
       <section className="hero-banner">
         <div className="banner-content">
+          <div className="banner-tag">NOVA COLEÇÃO</div>
           <h1>🔥 Digimon Action Figures</h1>
-          <p>Colecionáveis oficiais com entrega rápida</p>
+          <p>Colecionáveis oficiais com entrega rápida • Frete Grátis acima de R$ 200</p>
         </div>
       </section>
 
@@ -42,17 +43,25 @@ export default function Home() {
             </div>
           ) : (
             filtered.map((p) => (
-              <Link to={`/product/${p.id}`} key={p.id} className="card" style={{ textDecoration: 'none' }}>
-                <img src={p.image || "https://via.placeholder.com/200"} alt={p.name} />
-                <h3>{p.name}</h3>
-                <div className="price">
-                  <span className="value">R$ {p.price?.toFixed ? p.price.toFixed(2) : p.price}</span>
+              <Link to={`/product/${p.id}`} key={p.id} className="product-card" style={{ textDecoration: 'none' }}>
+                <div className="product-image-container">
+                  <img src={p.image || "https://via.placeholder.com/200"} alt={p.name} />
+                  {p.stock !== undefined && p.stock === 0 && (
+                    <div className="badge badge-out">Esgotado</div>
+                  )}
+                  {p.stock > 0 && p.stock < 5 && (
+                    <div className="badge badge-limited">Últimas unidades</div>
+                  )}
                 </div>
-                {p.stock !== undefined && (
-                  <span style={{ fontSize: '0.8rem', color: '#aaa' }}>
-                    {p.stock > 0 ? `${p.stock} disponíveis` : 'Esgotado'}
-                  </span>
-                )}
+                <div className="product-info">
+                  <h3 className="product-title">{p.name}</h3>
+                  <div className="product-price-row">
+                    <div className="price-main">R$ {p.price?.toFixed ? p.price.toFixed(2) : p.price}</div>
+                  </div>
+                  {p.stock !== undefined && p.stock > 0 && (
+                    <div className="product-stock">✓ {p.stock} disponíveis</div>
+                  )}
+                </div>
               </Link>
             ))
           )}
