@@ -7,9 +7,45 @@ export default function ManageProducts() {
   const { user } = useAuth();
   const [products, setProducts] = useState([]);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ name: "", description: "", price: "", image: "", stock: "" });
+  const [form, setForm] = useState({ name: "", description: "", price: "", image: "", stock: "", category: "Action Figure" });
   const [loading, setLoading] = useState(false);
   const { showToast } = useToast();
+  const [imageMode, setImageMode] = useState("url"); // "url" ou "upload"
+  const [uploadedFileName, setUploadedFileName] = useState("");
+
+  const categories = ["Action Figure", "Estátua", "Miniatura", "Deluxe", "Limitado"];
+
+  // Função para converter arquivo para base64
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        showToast('Por favor, selecione apenas arquivos de imagem', { type: 'error' });
+        return;
+      }
+      
+      // Validar tamanho (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('A imagem deve ter no máximo 5MB', { type: 'error' });
+        return;
+      }
+
+      setUploadedFileName(file.name);
+      const reader = new FileReader();
+      
+      reader.onloadend = () => {
+        setForm({ ...form, image: reader.result });
+        showToast('Imagem carregada com sucesso!', { type: 'success' });
+      };
+      
+      reader.onerror = () => {
+        showToast('Erro ao carregar imagem', { type: 'error' });
+      };
+      
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -23,8 +59,10 @@ export default function ManageProducts() {
   }
 
   function resetForm() {
-    setForm({ name: "", description: "", price: "", image: "", stock: "" });
+    setForm({ name: "", description: "", price: "", image: "", stock: "", category: "Action Figure" });
     setEditing(null);
+    setImageMode("url");
+    setUploadedFileName("");
   }
 
   async function handleSubmit(e) {
@@ -37,6 +75,7 @@ export default function ManageProducts() {
         price: parseFloat(form.price) || 0,
         image: form.image,
         stock: parseInt(form.stock) || 0,
+        category: form.category || "Action Figure",
       };
 
       if (editing) {
@@ -71,7 +110,16 @@ export default function ManageProducts() {
       price: prod.price,
       image: prod.image || "",
       stock: prod.stock || 0,
+      category: prod.category || "Action Figure",
     });
+    // Detectar se a imagem é base64 ou URL
+    if (prod.image && prod.image.startsWith('data:image')) {
+      setImageMode("upload");
+      setUploadedFileName("imagem-existente");
+    } else {
+      setImageMode("url");
+      setUploadedFileName("");
+    }
   }
 
   if (!user) {
@@ -171,20 +219,132 @@ export default function ManageProducts() {
               />
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label>
-                  <span className="label-icon">🖼️</span>
-                  URL da Imagem
-                </label>
-                <input
-                  type="text"
-                  value={form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  placeholder="https://exemplo.com/imagem.jpg"
-                />
+            {/* Modo de Imagem */}
+            <div className="form-group">
+              <label>
+                <span className="label-icon">🖼️</span>
+                Imagem do Produto
+              </label>
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageMode("url");
+                    setUploadedFileName("");
+                    if (form.image && form.image.startsWith('data:image')) {
+                      setForm({ ...form, image: "" });
+                    }
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: imageMode === "url" ? '2px solid #00f5d4' : '2px solid #e0eef6',
+                    background: imageMode === "url" ? 'rgba(0, 245, 212, 0.1)' : 'white',
+                    color: imageMode === "url" ? '#00f5d4' : '#666',
+                    fontWeight: imageMode === "url" ? 'bold' : 'normal',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  🔗 URL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageMode("upload");
+                    if (!form.image.startsWith('data:image')) {
+                      setForm({ ...form, image: "" });
+                    }
+                  }}
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    borderRadius: '8px',
+                    border: imageMode === "upload" ? '2px solid #ff4db2' : '2px solid #e0eef6',
+                    background: imageMode === "upload" ? 'rgba(255, 77, 178, 0.1)' : 'white',
+                    color: imageMode === "upload" ? '#ff4db2' : '#666',
+                    fontWeight: imageMode === "upload" ? 'bold' : 'normal',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  📤 Upload
+                </button>
               </div>
 
+              {imageMode === "url" ? (
+                <input
+                  type="text"
+                  value={form.image.startsWith('data:image') ? '' : form.image}
+                  onChange={(e) => setForm({ ...form, image: e.target.value })}
+                  placeholder="https://exemplo.com/imagem.jpg"
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: '2px solid #e0eef6',
+                    fontSize: '14px'
+                  }}
+                />
+              ) : (
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    id="file-upload"
+                    style={{ display: 'none' }}
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      border: '2px dashed #ff4db2',
+                      background: 'rgba(255, 77, 178, 0.05)',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      color: '#666'
+                    }}
+                    onMouseEnter={(e) => e.target.style.background = 'rgba(255, 77, 178, 0.1)'}
+                    onMouseLeave={(e) => e.target.style.background = 'rgba(255, 77, 178, 0.05)'}
+                  >
+                    {uploadedFileName ? (
+                      <span>📁 {uploadedFileName}</span>
+                    ) : (
+                      <span>📤 Clique para selecionar imagem (máx 5MB)</span>
+                    )}
+                  </label>
+                  {uploadedFileName && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForm({ ...form, image: "" });
+                        setUploadedFileName("");
+                      }}
+                      style={{
+                        marginTop: '10px',
+                        padding: '8px 16px',
+                        borderRadius: '6px',
+                        border: '1px solid #ff4db2',
+                        background: 'white',
+                        color: '#ff4db2',
+                        cursor: 'pointer',
+                        fontSize: '13px'
+                      }}
+                    >
+                      ✕ Remover imagem
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="form-row">
               <div className="form-group">
                 <label>
                   <span className="label-icon">📊</span>
@@ -198,6 +358,31 @@ export default function ManageProducts() {
                   min="0"
                 />
               </div>
+            </div>
+
+            <div className="form-group">
+              <label>
+                <span className="label-icon">🏷️</span>
+                Categoria *
+              </label>
+              <select
+                value={form.category}
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                required
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  borderRadius: '8px', 
+                  border: '2px solid #e0eef6',
+                  fontSize: '14px',
+                  background: 'white',
+                  cursor: 'pointer'
+                }}
+              >
+                {categories.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
             </div>
 
             <div className="form-actions-modern">

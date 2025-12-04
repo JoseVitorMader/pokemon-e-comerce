@@ -159,21 +159,24 @@ main { padding:1.5rem; max-width:1200px; margin:0 auto; position: relative }
 /* Badges */
 .badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 700;
   color: #fff;
   z-index: 2;
+  white-space: nowrap;
 }
 .badge-out {
   background: linear-gradient(90deg, #ff4757, #ff6b81);
+  bottom: 8px;
+  right: 8px;
 }
 .badge-limited {
   background: linear-gradient(90deg, var(--digimon-amber), #ffc883);
   color: #2b1500;
+  top: 8px;
+  right: 8px;
 }
 
 .product-info {
@@ -2145,5 +2148,214 @@ textarea { resize: vertical; min-height: 80px }
   .navigation { overflow:auto }
   .hero h2 { font-size:1.25rem }
   .card img { height:140px }
+}
+
+/* React Bootstrap Carousel Customization */
+.carousel {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  padding: 20px;
+}
+
+.carousel-indicators [data-bs-target] {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.carousel-caption {
+  background: rgba(0,0,0,0.7) !important;
+  backdrop-filter: blur(10px);
+  border-radius: 10px !important;
+  padding: 20px !important;
+  bottom: 30px !important;
+}
+
+.carousel-caption h3 {
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Bootstrap Card Hover Effects */
+.card {
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* Bootstrap Badge Customization */
+.badge {
+  padding: 6px 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Filtros Section */
+.filters-section {
+  animation: slideIn 0.3s ease;
+}
+
+.filters-section .form-control,
+.filters-section .form-select {
+  border: 2px solid #e0eef6;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: all 0.2s ease;
+}
+
+.filters-section .form-control:focus,
+.filters-section .form-select:focus {
+  border-color: var(--digimon-neon);
+  box-shadow: 0 0 0 3px rgba(0, 245, 212, 0.1);
+}
+
+/* Button Group Customization */
+.btn-group .btn {
+  border-radius: 8px;
+  margin: 2px;
+}
+
+/* Quick View Modal Improvements */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 15px 15px 0 0;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.modal-footer {
+  padding: 20px 30px;
+}
+
+/* Product Card with Quick View Button */
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card .btn-outline-primary {
+  border-color: var(--digimon-neon);
+  color: var(--digimon-neon);
+}
+
+.product-card .btn-outline-primary:hover {
+  background: var(--digimon-neon);
+  color: white;
+  border-color: var(--digimon-neon);
+}
+
+/* Loading States */
+.spinner-border {
+  color: var(--digimon-magenta);
+}
+
+/* Alert Customization */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe5a1 100%);
+  color: #856404;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+}
+
+/* Digimon Carousel Animations */
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-20px);
+  }
+}
+
+.digimon-carousel {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 
+    0 10px 40px rgba(0, 245, 212, 0.2),
+    0 0 100px rgba(0, 245, 212, 0.1);
+  border: 1px solid rgba(0, 245, 212, 0.2);
+}
+
+.digimon-carousel .carousel-control-prev-icon,
+.digimon-carousel .carousel-control-next-icon {
+  background-color: rgba(0, 245, 212, 0.3);
+  border: 2px solid #00f5d4;
+  border-radius: 50%;
+  padding: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.digimon-carousel .carousel-control-prev-icon:hover,
+.digimon-carousel .carousel-control-next-icon:hover {
+  background-color: rgba(0, 245, 212, 0.5);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.6);
+  transform: scale(1.1);
+}
+
+.digimon-carousel .carousel-indicators [data-bs-target] {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 0 6px;
+  background-color: rgba(0, 245, 212, 0.3);
+  border: 2px solid #00f5d4;
+  transition: all 0.3s ease;
+}
+
+.digimon-carousel .carousel-indicators .active {
+  background-color: #00f5d4;
+  box-shadow: 0 0 15px rgba(0, 245, 212, 0.8);
+  transform: scale(1.2);
 }
 
