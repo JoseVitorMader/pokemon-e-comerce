@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Badge } from 'react-bootstrap';
-import { FaShoppingCart, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaTimes, FaCheck, FaExclamationTriangle } from 'react-icons/fa';
 
 export default function QuickViewModal({ show, onHide, product, onAddToCart }) {
   if (!product) return null;
@@ -45,18 +45,18 @@ export default function QuickViewModal({ show, onHide, product, onAddToCart }) {
             <div className="mt-4">
               <div className="d-flex gap-2 mb-3" style={{ fontSize: '14px', color: '#666' }}>
                 <div className="d-flex align-items-center">
-                  <span style={{ color: '#00f5d4', marginRight: '5px' }}>✓</span>
+                  <span style={{ color: '#00f5d4', marginRight: '5px' }}><FaCheck /></span>
                   Frete grátis acima de R$ 200
                 </div>
                 <div className="d-flex align-items-center">
-                  <span style={{ color: '#00f5d4', marginRight: '5px' }}>✓</span>
+                  <span style={{ color: '#00f5d4', marginRight: '5px' }}><FaCheck /></span>
                   Pagamento seguro
                 </div>
               </div>
               
               {product.stock > 0 && product.stock < 5 && (
                 <div className="alert alert-warning" style={{ fontSize: '14px' }}>
-                  ⚠️ Apenas {product.stock} unidades disponíveis!
+                  <FaExclamationTriangle /> Apenas {product.stock} unidades disponíveis!
                 </div>
               )}
             </div>

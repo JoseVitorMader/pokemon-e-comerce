@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { getUserProducts, createProduct, updateProduct, deleteProduct } from "../../firebase";
-import { useToast } from "../../context/ToastContext";
+import { useAuth } from "../../../context/AuthContext";
+import { getUserProducts, createProduct, updateProduct, deleteProduct } from "../../../firebase";
+import { useToast } from "../../../context/ToastContext";
+import { Container, Row, Col, Form, Button, Card, Badge, Image } from "react-bootstrap";
+import { FaLock, FaBox, FaEdit, FaPlus, FaTimes, FaTag, FaDollarSign, FaFileAlt, FaImage, FaLink, FaUpload, FaFolder, FaChartBar, FaClipboardList, FaSave, FaTrash } from "react-icons/fa";
 
 export default function ManageProducts() {
   const { user } = useAuth();
@@ -126,7 +128,7 @@ export default function ManageProducts() {
     return (
       <div className="manage-container">
         <div className="manage-empty">
-          <div className="empty-icon">🔐</div>
+          <div className="empty-icon"><FaLock size={60} /></div>
           <h2>Acesso Restrito</h2>
           <p>Faça login para gerenciar seus produtos.</p>
         </div>
@@ -138,7 +140,7 @@ export default function ManageProducts() {
     <div className="manage-container">
       <div className="manage-header">
         <div className="manage-header-content">
-          <h2>📦 Gerenciar Produtos</h2>
+          <h2><FaBox /> Gerenciar Produtos</h2>
           <p className="manage-subtitle">Adicione, edite ou remova produtos da sua loja</p>
         </div>
         <div className="manage-stats">
@@ -160,10 +162,10 @@ export default function ManageProducts() {
       <div className="manage-content">
         <div className="product-form-card">
           <div className="form-header">
-            <h3>{editing ? "✏️ Editar Produto" : "➕ Novo Produto"}</h3>
+            <h3>{editing ? <><FaEdit /> Editar Produto</> : <><FaPlus /> Novo Produto</>}</h3>
             {editing && (
               <button type="button" className="btn-close-form" onClick={resetForm}>
-                ✕
+                <FaTimes />
               </button>
             )}
           </div>
@@ -178,7 +180,7 @@ export default function ManageProducts() {
             <div className="form-row">
               <div className="form-group">
                 <label>
-                  <span className="label-icon">🏷️</span>
+                  <span className="label-icon"><FaTag /></span>
                   Nome do Produto *
                 </label>
                 <input
@@ -192,7 +194,7 @@ export default function ManageProducts() {
 
               <div className="form-group">
                 <label>
-                  <span className="label-icon">💰</span>
+                  <span className="label-icon"><FaDollarSign /></span>
                   Preço (R$) *
                 </label>
                 <input
@@ -208,7 +210,7 @@ export default function ManageProducts() {
 
             <div className="form-group">
               <label>
-                <span className="label-icon">📝</span>
+                <span className="label-icon"><FaFileAlt /></span>
                 Descrição
               </label>
               <textarea
@@ -222,7 +224,7 @@ export default function ManageProducts() {
             {/* Modo de Imagem */}
             <div className="form-group">
               <label>
-                <span className="label-icon">🖼️</span>
+                <span className="label-icon"><FaImage /></span>
                 Imagem do Produto
               </label>
               <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
@@ -247,7 +249,7 @@ export default function ManageProducts() {
                     transition: 'all 0.2s'
                   }}
                 >
-                  🔗 URL
+                  <FaLink /> URL
                 </button>
                 <button
                   type="button"
@@ -269,7 +271,7 @@ export default function ManageProducts() {
                     transition: 'all 0.2s'
                   }}
                 >
-                  📤 Upload
+                  <FaUpload /> Upload
                 </button>
               </div>
 
@@ -314,9 +316,9 @@ export default function ManageProducts() {
                     onMouseLeave={(e) => e.target.style.background = 'rgba(255, 77, 178, 0.05)'}
                   >
                     {uploadedFileName ? (
-                      <span>📁 {uploadedFileName}</span>
+                      <span><FaFolder /> {uploadedFileName}</span>
                     ) : (
-                      <span>📤 Clique para selecionar imagem (máx 5MB)</span>
+                      <span><FaUpload /> Clique para selecionar imagem (máx 5MB)</span>
                     )}
                   </label>
                   {uploadedFileName && (
@@ -337,7 +339,7 @@ export default function ManageProducts() {
                         fontSize: '13px'
                       }}
                     >
-                      ✕ Remover imagem
+                      <FaTimes /> Remover imagem
                     </button>
                   )}
                 </div>
@@ -347,7 +349,7 @@ export default function ManageProducts() {
             <div className="form-row">
               <div className="form-group">
                 <label>
-                  <span className="label-icon">📊</span>
+                  <span className="label-icon"><FaChartBar /></span>
                   Estoque
                 </label>
                 <input
@@ -362,7 +364,7 @@ export default function ManageProducts() {
 
             <div className="form-group">
               <label>
-                <span className="label-icon">🏷️</span>
+                <span className="label-icon"><FaTag /></span>
                 Categoria *
               </label>
               <select
@@ -394,7 +396,7 @@ export default function ManageProducts() {
                   </>
                 ) : (
                   <>
-                    {editing ? "💾 Salvar Alterações" : "➕ Adicionar Produto"}
+                    {editing ? <><FaSave /> Salvar Alterações</> : <><FaPlus /> Adicionar Produto</>}
                   </>
                 )}
               </button>
@@ -409,13 +411,13 @@ export default function ManageProducts() {
 
         <div className="products-list-modern">
           <div className="list-header">
-            <h3>📋 Seus Produtos</h3>
+            <h3><FaClipboardList /> Seus Produtos</h3>
             <span className="product-count">{products.length} {products.length === 1 ? 'produto' : 'produtos'}</span>
           </div>
 
           {products.length === 0 ? (
             <div className="empty-products">
-              <div className="empty-icon">📦</div>
+              <div className="empty-icon"><FaBox size={60} /></div>
               <p>Nenhum produto cadastrado ainda</p>
               <span className="empty-hint">Comece adicionando seu primeiro produto acima!</span>
             </div>
@@ -450,11 +452,11 @@ export default function ManageProducts() {
 
                     <div className="product-card-actions">
                       <button className="btn-action btn-edit" onClick={() => handleEdit(p)}>
-                        <span>✏️</span>
+                        <span><FaEdit /></span>
                         Editar
                       </button>
                       <button className="btn-action btn-delete" onClick={() => handleDelete(p.id)}>
-                        <span>🗑️</span>
+                        <span><FaTrash /></span>
                         Excluir
                       </button>
                     </div>

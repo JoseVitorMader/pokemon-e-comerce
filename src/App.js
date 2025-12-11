@@ -1,18 +1,11 @@
 import React from "react";
 import "./styles.css";
-import { Header, Navigation, Footer } from "./Components/layout";
-import { DigitalBackground } from "./Components/common";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { 
-  Home, 
-  ProductsPage, 
-  ProductPage, 
-  Cart, 
-  Checkout, 
-  ProfilePage, 
-  LoginPage, 
-  ManageProducts 
-} from "./Components/pages";
+import Header from "./Components/layout/Header/Header";
+import Navigation from "./Components/layout/Navigation/Navigation";
+import Footer from "./Components/layout/Footer/Footer";
+import DigitalBackground from "./Components/common/DigitalBackground/DigitalBackground";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ToastProvider } from "./context/ToastContext";
@@ -29,16 +22,7 @@ function App() {
             <Navigation />
 
             <main style={{ padding: "1rem" }}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/products" element={<ProductsPage />} />
-                <Route path="/product/:id" element={<ProductPage />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/manage" element={<ManageProducts />} />
-              </Routes>
+              <AppRoutes />
             </main>
 
             <Footer />

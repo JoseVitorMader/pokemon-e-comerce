@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../../context/CartContext";
-import { useToast } from "../../context/ToastContext";
+import { useCart } from "../../../context/CartContext";
+import { useToast } from "../../../context/ToastContext";
+import { Container, Row, Col, Button, Badge, Card, ListGroup, Form, InputGroup, ProgressBar } from "react-bootstrap";
+import { FaShoppingCart, FaTrash, FaTruck, FaCheck, FaShoppingBag, FaHome, FaCog, FaTicketAlt, FaTimes, FaGlassCheers, FaLock, FaCreditCard } from "react-icons/fa";
 
 export default function Cart() {
   const { cart, removeItem, updateQty, total, clearCart } = useCart();
@@ -26,7 +28,7 @@ export default function Cart() {
     const coupon = coupons[couponCode.toUpperCase()];
     if (coupon) {
       setAppliedCoupon({ ...coupon, code: couponCode.toUpperCase() });
-      showToast(`✓ Cupom "${couponCode.toUpperCase()}" aplicado!`, { type: 'success' });
+      showToast(`Cupom "${couponCode.toUpperCase()}" aplicado!`, { type: 'success' });
     } else {
       showToast('Cupom inválido', { type: 'warning' });
     }
@@ -50,49 +52,51 @@ export default function Cart() {
   const remainingForFreeShipping = Math.max(0, 200 - total);
 
   return (
-    <div className="cart-page">
+    <Container className="cart-page">
       <div className="cart-header">
         <div>
-          <h2>🛒 Meu Carrinho</h2>
+          <h2><FaShoppingCart /> Meu Carrinho</h2>
           <p className="cart-subtitle">{totalItems} {totalItems === 1 ? 'produto' : 'produtos'} no carrinho</p>
         </div>
         {cart.length > 0 && (
-          <button className="btn-clear-cart" onClick={handleClearCart}>
-            🗑️ Limpar Carrinho
-          </button>
+          <Button variant="outline-danger" onClick={handleClearCart}>
+            <FaTrash /> Limpar Carrinho
+          </Button>
         )}
       </div>
 
       {/* Barra de progresso para frete grátis */}
       {cart.length > 0 && total < 200 && (
-        <div className="free-shipping-banner">
-          <div className="banner-content">
-            <span className="banner-icon">🚚</span>
-            <div className="banner-text">
-              <strong>Faltam R$ {remainingForFreeShipping.toFixed(2)} para frete grátis!</strong>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{ width: `${progressToFreeShipping}%` }}></div>
+        <Card className="mb-3 free-shipping-banner">
+          <Card.Body>
+            <div className="d-flex align-items-center gap-2">
+              <span className="banner-icon"><FaTruck /></span>
+              <div className="flex-grow-1">
+                <strong>Faltam R$ {remainingForFreeShipping.toFixed(2)} para frete grátis!</strong>
+                <ProgressBar now={progressToFreeShipping} className="mt-2" style={{ height: '8px' }} />
               </div>
             </div>
-          </div>
-        </div>
+          </Card.Body>
+        </Card>
       )}
 
       {total >= 200 && cart.length > 0 && (
-        <div className="free-shipping-banner success">
-          <span className="banner-icon">✓</span>
-          <strong>Parabéns! Você ganhou frete grátis!</strong>
-        </div>
+        <Card bg="success" text="white" className="mb-3">
+          <Card.Body className="d-flex align-items-center gap-2">
+            <span><FaCheck /></span>
+            <strong>Parabéns! Você ganhou frete grátis!</strong>
+          </Card.Body>
+        </Card>
       )}
       
       {cart.length === 0 ? (
         <div className="empty-cart-box">
-          <div className="empty-icon">🛍️</div>
+          <div className="empty-icon"><FaShoppingBag size={60} /></div>
           <h3>Seu carrinho está vazio</h3>
           <p>Explore nossos produtos e adicione seus favoritos!</p>
           <div className="empty-cart-actions">
-            <Link to="/" className="btn">🏠 Ir às Compras</Link>
-            <Link to="/manage" className="btn secondary">⚙️ Meus Produtos</Link>
+            <Button as={Link} to="/" variant="primary"><FaHome /> Ir às Compras</Button>
+            <Button as={Link} to="/manage" variant="outline-secondary"><FaCog /> Meus Produtos</Button>
           </div>
         </div>
       ) : (
@@ -148,7 +152,7 @@ export default function Cart() {
                     }}
                     title="Remover item"
                   >
-                    🗑️
+                    <FaTrash />
                   </button>
                 </div>
               </div>
@@ -171,7 +175,7 @@ export default function Cart() {
                 className="coupon-toggle" 
                 onClick={() => setShowCoupon(!showCoupon)}
               >
-                🎟️ {showCoupon ? 'Ocultar' : 'Tenho um cupom'}
+                <FaTicketAlt /> {showCoupon ? 'Ocultar' : 'Tenho um cupom'}
               </button>
               
               {showCoupon && (
@@ -196,14 +200,14 @@ export default function Cart() {
                   ) : (
                     <div className="applied-coupon">
                       <div className="coupon-info">
-                        <span className="coupon-icon">✓</span>
+                        <span className="coupon-icon"><FaCheck /></span>
                         <div>
                           <strong>{appliedCoupon.code}</strong>
                           <p>{appliedCoupon.description}</p>
                         </div>
                       </div>
                       <button className="btn-remove-coupon" onClick={handleRemoveCoupon}>
-                        ✕
+                        <FaTimes />
                       </button>
                     </div>
                   )}
@@ -244,7 +248,7 @@ export default function Cart() {
 
             {discount > 0 && (
               <div className="savings-badge">
-                🎉 Você economizou R$ {discount.toFixed(2)}
+                <FaGlassCheers /> Você economizou R$ {discount.toFixed(2)}
               </div>
             )}
 
@@ -253,13 +257,13 @@ export default function Cart() {
             </button>
 
             <div className="cart-benefits">
-              <div className="benefit-item">🔒 Compra 100% Segura</div>
+              <div className="benefit-item"><FaLock /> Compra 100% Segura</div>
               <div className="benefit-item">↩️ Devolução em 7 dias</div>
-              <div className="benefit-item">💳 Parcele em até 12x</div>
+              <div className="benefit-item"><FaCreditCard /> Parcele em até 12x</div>
             </div>
           </div>
         </div>
       )}
-    </div>
+    </Container>
   );
 }

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { fetchUserProfile, saveUserProfile, getUserProducts } from "../../firebase";
-import { useToast } from "../../context/ToastContext";
+import { useAuth } from "../../../context/AuthContext";
+import { fetchUserProfile, saveUserProfile, getUserProducts } from "../../../firebase";
+import { useToast } from "../../../context/ToastContext";
 import { Link } from "react-router-dom";
+import { Container, Row, Col, Form, Button, Card, Badge, Image, Spinner } from "react-bootstrap";
+import { FaUser, FaCheck, FaBox, FaChartBar, FaStore, FaCog, FaHome, FaEnvelope, FaMobileAlt, FaFileAlt, FaMapMarkerAlt, FaCity, FaMap, FaSave } from "react-icons/fa";
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -59,7 +61,7 @@ export default function ProfilePage() {
     setSaving(true);
     try {
       await saveUserProfile(user.uid, profile);
-      showToast("✓ Perfil salvo com sucesso", { type: 'success' });
+      showToast("Perfil salvo com sucesso", { type: 'success' });
     } catch (error) {
       showToast("Erro ao salvar perfil", { type: 'warning' });
     } finally {
@@ -82,7 +84,7 @@ export default function ProfilePage() {
     return (
       <div className="profile-page">
         <div className="profile-not-logged">
-          <div className="empty-icon">👤</div>
+          <div className="empty-icon"><FaUser size={60} /></div>
           <h2>Acesso Restrito</h2>
           <p>Faça login para acessar seu perfil</p>
           <Link to="/login" className="btn">Fazer Login</Link>
@@ -111,28 +113,28 @@ export default function ProfilePage() {
             <h2 className="profile-name">{profile.displayName || "Usuário"}</h2>
             <p className="profile-email">{profile.email}</p>
             <div className="profile-badge">
-              <span className="badge-icon">✓</span>
+              <span className="badge-icon"><FaCheck /></span>
               Conta Verificada
             </div>
           </div>
 
           <div className="profile-stats">
             <div className="stat-item">
-              <div className="stat-icon">📦</div>
+              <div className="stat-icon"><FaBox /></div>
               <div className="stat-info">
                 <div className="stat-number">{products.length}</div>
                 <div className="stat-text">Produtos</div>
               </div>
             </div>
             <div className="stat-item">
-              <div className="stat-icon">📊</div>
+              <div className="stat-icon"><FaChartBar /></div>
               <div className="stat-info">
                 <div className="stat-number">{totalStock}</div>
                 <div className="stat-text">Estoque Total</div>
               </div>
             </div>
             <div className="stat-item">
-              <div className="stat-icon">🏪</div>
+              <div className="stat-icon"><FaStore /></div>
               <div className="stat-info">
                 <div className="stat-number">{products.filter(p => p.stock > 0).length}</div>
                 <div className="stat-text">Disponíveis</div>
@@ -142,11 +144,11 @@ export default function ProfilePage() {
 
           <div className="profile-quick-actions">
             <Link to="/manage" className="quick-action-btn">
-              <span className="action-icon">⚙️</span>
+              <span className="action-icon"><FaCog /></span>
               Gerenciar Produtos
             </Link>
             <Link to="/" className="quick-action-btn">
-              <span className="action-icon">🏠</span>
+              <span className="action-icon"><FaHome /></span>
               Ir para Loja
             </Link>
           </div>
@@ -156,7 +158,7 @@ export default function ProfilePage() {
         <div className="profile-main">
           <div className="profile-section">
             <div className="section-title">
-              <h3>👤 Informações Pessoais</h3>
+              <h3><FaUser /> Informações Pessoais</h3>
               <p className="section-subtitle">Gerencie suas informações de perfil</p>
             </div>
 
@@ -164,7 +166,7 @@ export default function ProfilePage() {
               <div className="form-grid-profile">
                 <div className="form-group-profile">
                   <label>
-                    <span className="label-icon">👤</span>
+                    <span className="label-icon"><FaUser /></span>
                     Nome Completo
                   </label>
                   <input 
@@ -177,7 +179,7 @@ export default function ProfilePage() {
 
                 <div className="form-group-profile">
                   <label>
-                    <span className="label-icon">📧</span>
+                    <span className="label-icon"><FaEnvelope /></span>
                     Email
                   </label>
                   <input 
@@ -190,7 +192,7 @@ export default function ProfilePage() {
 
                 <div className="form-group-profile">
                   <label>
-                    <span className="label-icon">📱</span>
+                    <span className="label-icon"><FaMobileAlt /></span>
                     Telefone
                   </label>
                   <input 
@@ -203,7 +205,7 @@ export default function ProfilePage() {
 
                 <div className="form-group-profile full-width">
                   <label>
-                    <span className="label-icon">📝</span>
+                    <span className="label-icon"><FaFileAlt /></span>
                     Bio
                   </label>
                   <textarea 
@@ -218,14 +220,14 @@ export default function ProfilePage() {
               <div className="section-divider"></div>
 
               <div className="section-title">
-                <h3>📍 Endereço</h3>
+                <h3><FaMapMarkerAlt /> Endereço</h3>
                 <p className="section-subtitle">Informações de entrega</p>
               </div>
 
               <div className="form-grid-profile">
                 <div className="form-group-profile full-width">
                   <label>
-                    <span className="label-icon">🏠</span>
+                    <span className="label-icon"><FaHome /></span>
                     Endereço Completo
                   </label>
                   <input 
@@ -238,7 +240,7 @@ export default function ProfilePage() {
 
                 <div className="form-group-profile">
                   <label>
-                    <span className="label-icon">🌆</span>
+                    <span className="label-icon"><FaCity /></span>
                     Cidade
                   </label>
                   <input 
@@ -251,7 +253,7 @@ export default function ProfilePage() {
 
                 <div className="form-group-profile">
                   <label>
-                    <span className="label-icon">🗺️</span>
+                    <span className="label-icon"><FaMap /></span>
                     Estado
                   </label>
                   <input 
@@ -273,7 +275,7 @@ export default function ProfilePage() {
                     </>
                   ) : (
                     <>
-                      💾 Salvar Alterações
+                      <FaSave /> Salvar Alterações
                     </>
                   )}
                 </button>
@@ -285,24 +287,38 @@ export default function ProfilePage() {
           {products.length > 0 && (
             <div className="profile-section">
               <div className="section-title">
-                <h3>📦 Seus Produtos Recentes</h3>
+                <h3><FaBox /> Seus Produtos Recentes</h3>
                 <Link to="/manage" className="view-all-link">Ver todos →</Link>
               </div>
 
-              <div className="recent-products-grid">
+              <div>
                 {products.slice(0, 3).map((product) => (
-                  <div key={product.id} className="recent-product-card">
-                    <img src={product.image || "https://via.placeholder.com/100"} alt={product.name} />
-                    <div className="recent-product-info">
-                      <h4>{product.name}</h4>
-                      <div className="recent-product-meta">
-                        <span className="product-price">R$ {product.price?.toFixed(2)}</span>
-                        <span className={`product-stock ${product.stock === 0 ? 'out' : product.stock <= 5 ? 'low' : 'ok'}`}>
-                          {product.stock || 0} em estoque
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <Card key={product.id} className="mb-3" style={{ maxWidth: '100%' }}>
+                    <Row className="g-0">
+                      <Col md={4} sm={5} xs={12}>
+                        <Card.Img 
+                          src={product.image || "https://via.placeholder.com/150"} 
+                          alt={product.name}
+                          style={{ height: '150px', objectFit: 'cover', borderRadius: '8px 0 0 8px' }}
+                        />
+                      </Col>
+                      <Col md={8} sm={7} xs={12}>
+                        <Card.Body>
+                          <Card.Title style={{ fontSize: '16px', marginBottom: '8px', fontWeight: 'bold' }}>
+                            {product.name}
+                          </Card.Title>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <Badge bg="primary" style={{ fontSize: '13px', padding: '4px 8px' }}>
+                              R$ {product.price?.toFixed(2)}
+                            </Badge>
+                            <Badge bg={product.stock === 0 ? 'danger' : product.stock <= 5 ? 'warning' : 'success'} style={{ fontSize: '13px', padding: '4px 8px' }}>
+                              {product.stock || 0} em estoque
+                            </Badge>
+                          </div>
+                        </Card.Body>
+                      </Col>
+                    </Row>
+                  </Card>
                 ))}
               </div>
             </div>

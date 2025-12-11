@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { subscribeProducts } from "../../firebase";
+import { subscribeProducts } from "../../../firebase";
 import { Link } from "react-router-dom";
 import { Carousel, Form, Badge, ButtonGroup, Button } from "react-bootstrap";
-import QuickViewModal from "../common/QuickViewModal";
-import { useCart } from "../../context/CartContext";
-import { useToast } from "../../context/ToastContext";
+import QuickViewModal from "../../common/QuickViewModal/QuickViewModal";
+import { useCart } from "../../../context/CartContext";
+import { useToast } from "../../../context/ToastContext";
+import { GiEasterEgg } from "react-icons/gi";
+import { SiDigikeyelectronics } from "react-icons/si";
+import { FaSearch, FaTimes, FaSadTear, FaCheck } from "react-icons/fa";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -22,10 +25,10 @@ export default function Home() {
     return () => unsubscribe && unsubscribe();
   }, []);
 
-  // Categorias disponíveis
+
   const categories = ["Todos", "Action Figure", "Estátua", "Miniatura", "Deluxe", "Limitado"];
 
-  // Filtrar e ordenar produtos
+
   let filtered = products.filter((p) => {
     const matchesSearch = p.name?.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "Todos" || p.category === selectedCategory;
@@ -39,12 +42,12 @@ export default function Home() {
     return matchesSearch && matchesCategory && matchesPrice;
   });
 
-  // Ordenar
+
   if (sortBy === "price-asc") filtered.sort((a, b) => a.price - b.price);
   else if (sortBy === "price-desc") filtered.sort((a, b) => b.price - a.price);
   else if (sortBy === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
 
-  // Produtos em destaque para o carousel
+
   const featuredProducts = products.slice(0, 3);
 
   const handleAddToCart = (product) => {
@@ -63,12 +66,11 @@ export default function Home() {
       <section className="hero-banner">
         <div className="banner-content">
           <div className="banner-tag">NOVA COLEÇÃO</div>
-          <h1>🔥 Digimon Action Figures</h1>
-          <p>Colecionáveis oficiais com entrega rápida • Frete Grátis acima de R$ 200</p>
+          <h1><img src="/images/DigitamaLogo.png" alt="Digitama" style={{ height: '60px', marginRight: '15px', verticalAlign: 'middle' }} /> Digitama</h1>
+          <p>Colecionáveis oficiais com entrega rápida • Frete Grátis acima de R$ 200 !</p>
         </div>
       </section>
 
-      {/* Carousel de Produtos em Destaque com Tema Digimon */}
       {featuredProducts.length > 0 && (
         <Carousel className="mb-4 digimon-carousel" interval={3000}>
           {featuredProducts.map((product, index) => (
@@ -85,7 +87,6 @@ export default function Home() {
                 position: 'relative',
                 overflow: 'hidden'
               }}>
-                {/* Grid Pattern Background */}
                 <div style={{
                   position: 'absolute',
                   inset: 0,
@@ -97,7 +98,6 @@ export default function Home() {
                   opacity: 0.5
                 }}></div>
 
-                {/* Animated Lines */}
                 <div style={{
                   position: 'absolute',
                   top: '20%',
@@ -117,7 +117,6 @@ export default function Home() {
                   animation: 'scanline 4s linear infinite reverse'
                 }}></div>
 
-                {/* Glowing Circles */}
                 <div style={{
                   position: 'absolute',
                   top: '10%',
@@ -141,13 +140,13 @@ export default function Home() {
                   animation: 'pulse 4s ease-in-out infinite'
                 }}></div>
 
-                {/* Product Image Container */}
                 <div style={{
                   position: 'relative',
                   zIndex: 2,
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  pointerEvents: 'none',
                 }}>
-                  {/* Digital Frame */}
+
                   <div style={{
                     position: 'absolute',
                     top: '-20px',
@@ -171,7 +170,6 @@ export default function Home() {
                     }}
                   />
                   
-                  {/* Scan Line Effect */}
                   <div style={{
                     position: 'absolute',
                     inset: 0,
@@ -181,7 +179,6 @@ export default function Home() {
                   }}></div>
                 </div>
 
-                {/* Data Stream Effect */}
                 <div style={{
                   position: 'absolute',
                   top: '50%',
@@ -272,12 +269,11 @@ export default function Home() {
 
 
 
-      {/* Barra de Busca e Filtros */}
       <div className="filters-section" style={{ background: 'white', padding: '20px', borderRadius: '10px', marginBottom: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
         <div className="search-bar mb-3">
           <Form.Control
             type="text"
-            placeholder="🔍 Buscar produtos..."
+            placeholder="Buscar produtos..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             size="lg"
@@ -285,7 +281,6 @@ export default function Home() {
         </div>
 
         <div className="row g-3">
-          {/* Filtro de Categoria */}
           <div className="col-md-4">
             <Form.Label><strong>Categoria</strong></Form.Label>
             <Form.Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
@@ -295,7 +290,6 @@ export default function Home() {
             </Form.Select>
           </div>
 
-          {/* Filtro de Preço */}
           <div className="col-md-4">
             <Form.Label><strong>Faixa de Preço</strong></Form.Label>
             <Form.Select value={priceRange} onChange={(e) => setPriceRange(e.target.value)}>
@@ -307,7 +301,6 @@ export default function Home() {
             </Form.Select>
           </div>
 
-          {/* Ordenação */}
           <div className="col-md-4">
             <Form.Label><strong>Ordenar por</strong></Form.Label>
             <Form.Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -319,24 +312,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Filtros Ativos */}
         <div className="mt-3">
           {(selectedCategory !== "Todos" || priceRange !== "Todos" || search) && (
             <div className="d-flex gap-2 align-items-center flex-wrap">
               <span style={{ fontSize: '14px', color: '#666' }}>Filtros ativos:</span>
               {selectedCategory !== "Todos" && (
                 <Badge bg="primary" style={{ cursor: 'pointer' }} onClick={() => setSelectedCategory("Todos")}>
-                  {selectedCategory} ✕
+                  {selectedCategory} <FaTimes />
                 </Badge>
               )}
               {priceRange !== "Todos" && (
                 <Badge bg="success" style={{ cursor: 'pointer' }} onClick={() => setPriceRange("Todos")}>
-                  {priceRange} ✕
+                  {priceRange} <FaTimes />
                 </Badge>
               )}
               {search && (
                 <Badge bg="info" style={{ cursor: 'pointer' }} onClick={() => setSearch("")}>
-                  Busca: "{search}" ✕
+                  Busca: "{search}" <FaTimes />
                 </Badge>
               )}
             </div>
@@ -347,12 +339,12 @@ export default function Home() {
       <section className="products-section">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2>Todos os Produtos</h2>
-          <Badge bg="secondary">{filtered.length} produtos encontrados</Badge>
+
         </div>
         <div className="grid">
           {filtered.length === 0 ? (
             <div style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#999', padding: '40px' }}>
-              <h4>😕 Nenhum produto encontrado</h4>
+              <h4><FaSadTear size={40} /> Nenhum produto encontrado</h4>
               <p>Tente ajustar os filtros ou fazer uma nova busca</p>
               <Button variant="primary" onClick={() => {
                 setSearch("");
@@ -386,7 +378,7 @@ export default function Home() {
                       <div className="price-main">R$ {p.price?.toFixed ? p.price.toFixed(2) : p.price}</div>
                     </div>
                     {p.stock !== undefined && p.stock > 0 && (
-                      <div className="product-stock">✓ {p.stock} disponíveis</div>
+                      <div className="product-stock"><FaCheck /> {p.stock} disponíveis</div>
                     )}
                   </div>
                 </Link>

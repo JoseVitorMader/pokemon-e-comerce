@@ -1,6 +1,9 @@
-import { useAuth } from "../../context/AuthContext";
-import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../../context/AuthContext";
+import { useCart } from "../../../context/CartContext";
 import { Link } from "react-router-dom";
+import { Button, Badge, Image, Container } from "react-bootstrap";
+import { SiDigikeyelectronics } from "react-icons/si";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Header = () => {
   const { user, loginWithGoogle, logout } = useAuth();
@@ -11,24 +14,26 @@ const Header = () => {
 
   return (
     <header className="header">
-      <h1 className="logo">Digimon Shop</h1>
+      <h1 className="logo">
+        <img src="/images/DigitamaLogo.png" alt="Digitama" style={{ height: '40px', marginRight: '10px', verticalAlign: 'middle' }} /> Digitama
+      </h1>
       <div className="header-actions">
         <Link to="/cart" className="cart-icon-link">
-          🛒
-          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          <FaShoppingCart />
+          {cartCount > 0 && <Badge bg="danger" className="cart-badge">{cartCount}</Badge>}
         </Link>
         {user ? (
           <div className="profile-inline">
             {user.photoURL ? (
-              <img src={user.photoURL} alt={user.displayName || user.email} className="profile-avatar" />
+              <Image src={user.photoURL} alt={user.displayName || user.email} className="profile-avatar" roundedCircle />
             ) : (
               <div className="profile-avatar profile-initials">{initials}</div>
             )}
             <span className="user-greeting">{user.displayName || user.email}</span>
-            <button className="btn logout-btn" onClick={logout}>Sair</button>
+            <Button variant="outline-danger" size="sm" onClick={logout}>Sair</Button>
           </div>
         ) : (
-          <button className="btn auth-btn" onClick={loginWithGoogle}>Entrar com Google</button>
+          <Button variant="primary" onClick={loginWithGoogle}>Entrar com Google</Button>
         )}
       </div>
     </header>

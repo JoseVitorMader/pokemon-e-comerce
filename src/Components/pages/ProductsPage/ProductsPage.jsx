@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { subscribeProducts } from "../../firebase";
+import { subscribeProducts } from "../../../firebase";
 import { Link } from "react-router-dom";
 import { Form, Badge, Button, Card, Row, Col, ButtonGroup } from "react-bootstrap";
+import { FaGamepad, FaTh, FaList, FaSadTear } from "react-icons/fa";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -22,19 +23,19 @@ export default function ProductsPage() {
   return (
     <div style={{ padding: '20px' }}>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>🎮 Action Figures de Digimon</h2>
+        <h2><FaGamepad /> Action Figures de Digimon</h2>
         <ButtonGroup>
           <Button 
             variant={viewMode === "grid" ? "primary" : "outline-primary"} 
             onClick={() => setViewMode("grid")}
           >
-            ⊞ Grid
+            <FaTh /> Grid
           </Button>
           <Button 
             variant={viewMode === "list" ? "primary" : "outline-primary"} 
             onClick={() => setViewMode("list")}
           >
-            ☰ Lista
+            <FaList /> Lista
           </Button>
         </ButtonGroup>
       </div>
@@ -58,7 +59,7 @@ export default function ProductsPage() {
       {/* Lista de Produtos */}
       {filtered.length === 0 ? (
         <div className="text-center py-5">
-          <h4>😕 Nenhum produto encontrado</h4>
+          <h4><FaSadTear /> Nenhum produto encontrado</h4>
           <p className="text-muted">Não há produtos nesta categoria no momento.</p>
         </div>
       ) : viewMode === "grid" ? (
