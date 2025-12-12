@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useCart } from "../../../context/CartContext";
+import { useAuth } from "../../../context/AuthContext";
+import { placeOrder, saveCartToDb } from "../../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../../context/ToastContext";
 import { Container, Row, Col, Form, Button, Card, ListGroup, Badge, InputGroup } from "react-bootstrap";
@@ -22,6 +24,7 @@ export default function Checkout() {
 
   const shippingCost = total >= 200 ? 0 : 15;
   const finalTotal = total + shippingCost;
+  const { user } = useAuth();
 
   async function handlePlaceOrder(e) {
     e.preventDefault();
@@ -30,13 +33,39 @@ export default function Checkout() {
     // Mock payment processing
     await new Promise((r) => setTimeout(r, 2000));
     
-    clearCart();
-    setProcessing(false);
-    showToast("Pedido realizado com sucesso!", { type: 'success' });
-    
-    setTimeout(() => {
-      navigate("/");
-    }, 1500);
+    try {
+      if (!user) {
+        showToast('Você precisa estar logado para finalizar a compra', { type: 'danger' });
+        setProcessing(false);
+        return;
+      }
+
+      const orderPayload = {
+        name,
+        address,
+        phone,
+        cep,
+        paymentMethod,
+        total,
+        shippingCost,
+        finalTotal
+      };
+
+      // Place order (will decrement stock atomically)
+      const orderId = await placeOrder(user.uid, orderPayload, cart);
+
+      // Save empty cart to DB (user's cart cleared after purchase)
+      await saveCartToDb(user.uid, []);
+
+      clearCart();
+      showToast(`Pedido ${orderId} realizado com sucesso!`, { type: 'success' });
+      setProcessing(false);
+      setTimeout(() => navigate('/'), 1500);
+    } catch (err) {
+      console.error('Erro ao processar pedido:', err);
+      showToast(`Erro ao processar pedido: ${err.message || err}`, { type: 'danger' });
+      setProcessing(false);
+    }
   }
 
   if (cart.length === 0) {

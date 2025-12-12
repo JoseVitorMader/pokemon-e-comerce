@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { subscribeProducts } from "../../../firebase";
 import { Link } from "react-router-dom";
 import { Carousel, Form, Badge, ButtonGroup, Button } from "react-bootstrap";
@@ -48,7 +48,15 @@ export default function Home() {
   else if (sortBy === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
 
 
-  const featuredProducts = products.slice(0, 3);
+  const featuredProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
+    const copy = [...products];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, 3);
+  }, [products]);
 
   const handleAddToCart = (product) => {
     addItem(product);
